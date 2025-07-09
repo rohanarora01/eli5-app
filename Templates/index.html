@@ -671,69 +671,56 @@
       return prompts[age] || prompts['5'];
     }
 
-    
-      // Replace your existing getExplanation function with this updated version
-async function getExplanation() {
-  const input = document.getElementById("inputText").value.trim();
-  const button = document.getElementById("explainBtn");
-  const loading = document.getElementById("loading");
-  const output = document.getElementById("output");
-  const explanationText = document.getElementById("explanation-text");
+    async function getExplanation() {
+      const input = document.getElementById("inputText").value.trim();
+      const button = document.getElementById("explainBtn");
+      const loading = document.getElementById("loading");
+      const output = document.getElementById("output");
+      const explanationText = document.getElementById("explanation-text");
 
-  if (!input) {
-    alert("Please enter something you'd like me to explain! 😊");
-    return;
-  }
+      if (!input) {
+        alert("Please enter something you'd like me to explain! 😊");
+        return;
+      }
 
-  // Show loading state
-  button.disabled = true;
-  button.innerHTML = "🤔 Thinking...";
-  loading.style.display = "block";
-  output.style.display = "none";
+      // Show loading state
+      button.disabled = true;
+      button.innerHTML = "🤔 Thinking...";
+      loading.style.display = "block";
+      output.style.display = "none";
 
-  try {
-    const prompt = `${getDifficultyPrompt(currentDifficulty)}:\n\n${input}`;
-    
-    // Updated fetch URL to use Vercel API route
-    const res = await fetch("/api/explain", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ text: prompt })
-    });
-    
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      try {
+        const prompt = `${getDifficultyPrompt(currentDifficulty)}:\n\n${input}`;
+        
+        const res = await fetch("/explain", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ text: prompt })
+        });
+        
+        const data = await res.json();
+        
+        // Hide loading and show result
+        loading.style.display = "none";
+        explanationText.innerHTML = formatMarkdown(data.result);
+        output.style.display = "block";
+        
+        // Add to history
+        addToHistory(input, data.result);
+        
+        // Scroll to result
+        output.scrollIntoView({ behavior: 'smooth' });
+        
+      } catch (error) {
+        loading.style.display = "none";
+        explanationText.innerHTML = "Oops! Something went wrong. Please try again! 😅";
+        output.style.display = "block";
+      } finally {
+        // Reset button
+        button.disabled = false;
+        button.innerHTML = "🚀 Explain Like I'm 5!";
+      }
     }
-    
-    const data = await res.json();
-    
-    // Hide loading and show result
-    loading.style.display = "none";
-    explanationText.innerHTML = formatMarkdown(data.result);
-    output.style.display = "block";
-    
-    // Add to history
-    addToHistory(input, data.result);
-    
-    // Scroll to result
-    output.scrollIntoView({ behavior: 'smooth' });
-    
-  } catch (error) {
-    console.error('Error:', error);
-    loading.style.display = "none";
-    explanationText.innerHTML = `
-      <div style="padding: 20px; background: #fee; border-radius: 8px; border-left: 4px solid #e74c3c;">
-        <p><strong>Oops! Something went wrong. Please try again! 😅</strong></p>
-        <p><small>Error: ${error.message}</small></p>
-      </div>
-    `;
-    output.style.display = "block";
-  } finally {
-    // Reset button
-    button.disabled = false;
-    button.innerHTML = "🚀 Explain Like I'm 5!";
-  }
-}
 
     // Add enter key support
     document.getElementById("inputText").addEventListener("keypress", function(event) {
