@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ELI5 - Explain Like I'm 5</title>
+  <title>Roh's ELI5 - Explain Like I'm 5</title>
   <style>
     :root {
       --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -472,7 +472,7 @@
 
   <div class="container">
     <div class="header">
-      <h1>🧠 ELI5 - Explain Like I'm 5! 🎈</h1>
+      <h1>🧠Roh's ELI5 - Explain Like I'm 5! 🎈</h1>
       <div class="controls">
         <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
         <button class="history-toggle" onclick="toggleHistory()">📚</button>
@@ -566,14 +566,24 @@
       panel.classList.toggle('open');
     }
 
-    // Difficulty selection
-    document.querySelectorAll('.difficulty-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentDifficulty = btn.dataset.age;
-      });
-    });
+    // Difficulty selection + button label change
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentDifficulty = btn.dataset.age;
+
+    const explainBtn = document.getElementById("explainBtn");
+    const buttonTextMap = {
+      '5': "🚀 Explain Like I'm 5!",
+      '10': "🚀 Explain Like I'm 10!",
+      '15': "🚀 Explain Like I'm 15!",
+      'adult': "🚀 Explain Like a Simple Adult!"
+    };
+    explainBtn.innerText = buttonTextMap[currentDifficulty] || "🚀 Explain Like I'm 5!";
+  });
+});
+
 
     // Random topic generator
     function getRandomTopic() {
