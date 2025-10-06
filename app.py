@@ -19,7 +19,7 @@ def explain():
     prompt = f"Explain this like I'm 5:\n\n{user_input}"
 
     # Fix: Updated to use correct model name and stable v1 API
-    url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent"
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
     headers = { "Content-Type": "application/json" }
     params = { "key": GEMINI_API_KEY }
     payload = {
@@ -43,3 +43,4 @@ def explain():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
