@@ -16,7 +16,7 @@ def home():
 @app.route("/explain", methods=["POST"])
 def explain():
     user_input = request.json.get("text", "")
-    prompt = f"Explain this like I'm 5:\n\n{user_input}"
+    prompt = user_input
 
     # Fix: Updated to use correct model name and stable v1 API
     url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
@@ -43,4 +43,3 @@ def explain():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
